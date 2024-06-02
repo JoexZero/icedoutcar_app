@@ -7,17 +7,37 @@ import 'package:icedoutcar/theme/theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
-  runApp(const IcedOutApp());
+  runApp(const HomePage());
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: MaterialTheme.lightMediumContrastScheme().toColorScheme(),
+      ),
+      home: IcedOutApp(),
+    );
+  }
 }
 
 class IcedOutApp extends StatefulWidget {
   const IcedOutApp({super.key});
 
   @override
-  State<IcedOutApp> createState() => _IcedOutApp();
+  State<IcedOutApp> createState() => _IcedOutAppState();
 }
 
-class _IcedOutApp extends State<IcedOutApp> {
+class _IcedOutAppState extends State<IcedOutApp> {
   double pi = 3.14159265359;
   BluetoothDevice? connectedDevice;
   BluetoothConnection? connection;
@@ -28,24 +48,20 @@ class _IcedOutApp extends State<IcedOutApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: MaterialTheme.lightMediumContrastScheme().toColorScheme(),
-      
-      ),
-      home: Scaffold(
+    return body();
+  }
 
-        appBar: AppBar(title: const Text('Iced Out App')),
-        body: Directionality(
-          textDirection: TextDirection.ltr,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              double height = constraints.maxHeight;
-              bool vertical = height > 500;
-              return verticalView(height);
-            },
-          ),
+  Widget body() {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Iced Out App')),
+      body: Directionality(
+        textDirection: TextDirection.ltr,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            double height = constraints.maxHeight;
+            bool vertical = height > 500;
+            return verticalView(height);
+          },
         ),
       ),
     );
@@ -87,7 +103,8 @@ class _IcedOutApp extends State<IcedOutApp> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8), // Abstand zwischen den Buttons
+                        const SizedBox(
+                            width: 8), // Abstand zwischen den Buttons
                         Expanded(
                           child: SizedBox(
                             height: height * 0.08, // Höhe der Buttons anpassen
@@ -106,7 +123,8 @@ class _IcedOutApp extends State<IcedOutApp> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8), // Abstand zwischen den Buttons
+                        const SizedBox(
+                            width: 8), // Abstand zwischen den Buttons
                         Expanded(
                           child: SizedBox(
                             height: height * 0.08, // Höhe der Buttons anpassen
@@ -128,7 +146,8 @@ class _IcedOutApp extends State<IcedOutApp> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10), // Abstand zwischen den Buttonreihen
+                  const SizedBox(
+                      height: 10), // Abstand zwischen den Buttonreihen
                   SizedBox(
                     height: height * 0.1,
                     width: double.infinity,
@@ -231,194 +250,185 @@ class _IcedOutApp extends State<IcedOutApp> {
   }
 
   Widget controllerView({required double height}) {
-  return SizedBox(
-    height: height,
-    child: Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Row(
-            children: [
-              Expanded(
-                child: SizedBox.expand(
+    return SizedBox(
+      height: height,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox.expand(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
+                      onPressed: () {
+                        sendMessage('ind_left');
+                      },
+                      child: const Icon(Icons.arrow_back_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: SizedBox.expand(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(),
+                      onPressed: () {
+                        sendMessage('ind_right');
+                      },
+                      child: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Expanded(flex: 1, child: SizedBox()),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-
-                    ),
                     onPressed: () {
-                      sendMessage('ind_left');
+                      // Dein Code hier für 'up-null'
+                      sendMessage("direction:F");
                     },
-                    child: const Icon(Icons.arrow_back_ios),
+                    onLongPress: () {
+                      // Dein Code hier für 'direction:F'
+                      sendMessage("direction:S");
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.arrow_upward),
+                        SizedBox(height: 5),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 80), // Größe der Schaltfläche
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40), // Ovalform
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Container(
-                  color: Colors.transparent,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: SizedBox.expand(
+                const SizedBox(width: 10),
+              ],
+            ),
+          ),
+          const Expanded(flex: 1, child: SizedBox()),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Expanded(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-
-                    ),
                     onPressed: () {
-                      sendMessage('ind_right');
+                      // Dein Code hier für 'up-left'
+                      sendMessage("steering:-10");
                     },
-                    child: const Icon(Icons.arrow_forward_ios),
+                    onLongPress: () {
+                      // Dein Code hier für 'stop'
+                      print('stop');
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.arrow_back),
+                        SizedBox(height: 5),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 80), // Größe der Schaltfläche
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40), // Ovalform
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      sendMessage("direction:R");
+                    },
+                    onLongPress: () {
+                      // Dein Code hier für 'direction:F'
+                      sendMessage("direction:S");
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.arrow_downward),
+                        SizedBox(height: 5),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 80), // Größe der Schaltfläche
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40), // Ovalform
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Dein Code hier für 'up-right'
+                      sendMessage("steering:-100");
+                    },
+                    onLongPress: () {
+                      // Dein Code hier für 'stop'
+                      print('stop');
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.arrow_forward),
+                        SizedBox(height: 5),
+                      ],
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(150, 80), // Größe der Schaltfläche
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40), // Ovalform
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const Expanded(flex: 1, child: SizedBox()),
-        Expanded(
-          flex: 3,
-          child: Row(
-            children: [
-              const SizedBox(width: 10),
-              Expanded(
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Dein Code hier für 'up-null'
-                    sendMessage("direction:F");
-                  },
-                  onLongPress: () {
-                    // Dein Code hier für 'direction:F'
-                    sendMessage("direction:S");
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.arrow_upward),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-
-                    minimumSize: Size(150, 80), // Größe der Schaltfläche
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // Ovalform
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-              const SizedBox(width: 10),
-            ],
-          ),
-        ),
-        const Expanded(flex: 1, child: SizedBox()),
-        Expanded(
-          flex: 3,
-          child: Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Dein Code hier für 'up-left'
-                    sendMessage("steering:-10");
-                  },
-                  onLongPress: () {
-                    // Dein Code hier für 'stop'
-                    print('stop');
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.arrow_back),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-
-                    minimumSize: Size(150, 80), // Größe der Schaltfläche
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // Ovalform
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    sendMessage("direction:R");
-                  },
-                  onLongPress: () {
-                    // Dein Code hier für 'direction:F'
-                    sendMessage("direction:S");
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.arrow_downward),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-
-                    minimumSize: Size(150, 80), // Größe der Schaltfläche
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // Ovalform
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Dein Code hier für 'up-right'
-                    sendMessage("steering:-100");
-                  },
-                  onLongPress: () {
-                    // Dein Code hier für 'stop'
-                    print('stop');
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.arrow_forward),
-                      SizedBox(height: 5),
-                    ],
-                  ),
-                  style: ElevatedButton.styleFrom(
-
-                    minimumSize: Size(150, 80), // Größe der Schaltfläche
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40), // Ovalform
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   Widget controllerButton({
     required String startMessage,
